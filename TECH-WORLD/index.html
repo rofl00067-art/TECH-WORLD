@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TECH WORLD</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #080d18;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background: #101a2c;
+    padding: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: #00d9ff;
+    font-size: 27px;
+    font-weight: bold;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+}
+
+.hero {
+    text-align: center;
+    padding: 110px 20px;
+    background: linear-gradient(135deg, #101d38, #102c48);
+}
+
+.hero h1 {
+    font-size: 55px;
+    color: #00d9ff;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 19px;
+    color: #b9c9df;
+}
+
+button {
+    background: #00c8ff;
+    border: none;
+    padding: 14px 30px;
+    margin-top: 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+section {
+    padding: 50px 25px;
+}
+
+h2 {
+    color: #00d9ff;
+    margin-bottom: 25px;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    background: #142137;
+    padding: 30px;
+    border-radius: 15px;
+    flex: 1;
+    min-width: 220px;
+    border: 1px solid #263d5c;
+}
+
+.card h3 {
+    color: #00d9ff;
+    margin-bottom: 15px;
+}
+
+footer {
+    background: #101a2c;
+    padding: 25px;
+    text-align: center;
+    color: #8fa3bd;
+}
+
+@media(max-width:600px) {
+    .hero h1 {
+        font-size: 36px;
+    }
+    header {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">TECH WORLD</div>
+    <nav>
+        <a href="#">Главная</a>
+        <a href="#news">Новости</a>
+        <a href="#about">О нас</a>
+    </nav>
+</header>
+
+<div class="hero">
+    <h1>БУДУЩЕЕ УЖЕ ЗДЕСЬ</h1>
+    <p>Открой мир технологий вместе с TECH WORLD</p>
+    <button onclick="alert('Добро пожаловать в TECH WORLD!')">
+        Начать
+    </button>
+</div>
+
+<section id="news">
+    <h2>Технологии</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Искусственный интеллект</h3>
+            <p>Узнавай о развитии современных AI-технологий.</p>
+        </div>
+
+        <div class="card">
+            <h3>Компьютеры</h3>
+            <p>Изучай компьютерное оборудование и программы.</p>
+        </div>
+
+        <div class="card">
+            <h3>Программирование</h3>
+            <p>Создавай собственные проекты и сайты.</p>
+        </div>
+    </div>
+</section>
+
+<section id="about">
+    <h2>О проекте</h2>
+    <p>TECH WORLD — портал для любителей технологий.</p>
+</section>
+
+<footer>
+    TECH WORLD © 2026
+</footer>
+
+</body>
+</html>
