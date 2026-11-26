@@ -1,0 +1,319 @@
+﻿
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MY GOALS | Мои цели</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #101426;
+    color: white;
+    padding: 25px;
+}
+
+.container {
+    max-width: 850px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    font-size: 38px;
+    color: #72a7ff;
+}
+
+.subtitle {
+    text-align: center;
+    color: #aab4d0;
+}
+
+.stats {
+    display: flex;
+    gap: 12px;
+    margin: 30px 0;
+}
+
+.stat {
+    flex: 1;
+    background: #1d2742;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.stat h2 {
+    color: #72a7ff;
+    font-size: 28px;
+    margin: 5px;
+}
+
+.panel {
+    background: #1d2742;
+    padding: 22px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 9px;
+    background: #303c5c;
+    color: white;
+    font-size: 15px;
+}
+
+button {
+    border: none;
+    padding: 12px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.add {
+    width: 100%;
+    background: #548cff;
+    color: white;
+    margin-top: 10px;
+}
+
+.goal {
+    background: #263452;
+    padding: 18px;
+    border-radius: 13px;
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.goal.done {
+    opacity: 0.55;
+}
+
+.goal.done .goal-name {
+    text-decoration: line-through;
+}
+
+.goal-name {
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.goal small {
+    display: block;
+    color: #aab4d0;
+    margin-top: 7px;
+}
+
+.actions {
+    display: flex;
+    gap: 7px;
+    flex-shrink: 0;
+}
+
+.check {
+    background: #27ae80;
+    color: white;
+}
+
+.delete {
+    background: #e34e64;
+    color: white;
+}
+
+.progress-bg {
+    background: #303c5c;
+    height: 13px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background: #49d6a0;
+    transition: 0.4s;
+}
+
+#goalList {
+    min-height: 60px;
+}
+
+@media(max-width: 500px) {
+    body { padding: 12px; }
+    .stats { gap: 6px; }
+    .stat { padding: 12px 5px; }
+    .goal { align-items: flex-start; }
+    .actions { flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>🎯 MY GOALS</h1>
+<p class="subtitle">Set your goals. Work hard. Achieve them.</p>
+
+<div class="stats">
+    <div class="stat">
+        <h2 id="total">0</h2>
+        <span>Всего целей</span>
+    </div>
+    <div class="stat">
+        <h2 id="completed">0</h2>
+        <span>Выполнено</span>
+    </div>
+    <div class="stat">
+        <h2 id="percent">0%</h2>
+        <span>Прогресс</span>
+    </div>
+</div>
+
+<div class="panel">
+    <h2>➕ Новая цель</h2>
+
+    <input id="goalInput" placeholder="Например: Выучить Python">
+
+    <input id="deadline" type="date">
+
+    <button class="add" onclick="addGoal()">
+        + Добавить цель
+    </button>
+</div>
+
+<div class="panel">
+    <h2>📊 Мой прогресс</h2>
+    <div class="progress-bg">
+        <div class="progress" id="progress"></div>
+    </div>
+    <p id="progressText">Ты только начинаешь!</p>
+</div>
+
+<div class="panel">
+    <h2>📌 Мои цели</h2>
+    <div id="goalList"></div>
+</div>
+
+</div>
+
+<script>
+let goals = JSON.parse(localStorage.getItem("myGoals")) || [];
+
+function save() {
+    localStorage.setItem("myGoals", JSON.stringify(goals));
+}
+
+function addGoal() {
+    const name = document.getElementById("goalInput").value.trim();
+    const date = document.getElementById("deadline").value;
+
+    if (!name) {
+        alert("Напиши свою цель!");
+        return;
+    }
+
+    goals.push({
+        id: Date.now(),
+        name: name,
+        date: date,
+        done: false
+    });
+
+    document.getElementById("goalInput").value = "";
+    document.getElementById("deadline").value = "";
+
+    save();
+    render();
+}
+
+function toggleGoal(id) {
+    goals = goals.map(g =>
+        g.id === id ? {...g, done: !g.done} : g
+    );
+    save();
+    render();
+}
+
+function deleteGoal(id) {
+    if (confirm("Удалить эту цель?")) {
+        goals = goals.filter(g => g.id !== id);
+        save();
+        render();
+    }
+}
+
+function render() {
+    const list = document.getElementById("goalList");
+
+    list.innerHTML = "";
+
+    goals.forEach(g => {
+        const item = document.createElement("div");
+        item.className = "goal" + (g.done ? " done" : "");
+
+        const info = document.createElement("div");
+
+        const name = document.createElement("div");
+        name.className = "goal-name";
+        name.textContent = (g.done ? "🏆 " : "🎯 ") + g.name;
+
+        const date = document.createElement("small");
+        date.textContent = g.date
+            ? "Дедлайн: " + g.date
+            : "Без дедлайна";
+
+        info.append(name, date);
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const check = document.createElement("button");
+        check.className = "check";
+        check.textContent = g.done ? "↩" : "✓";
+        check.title = g.done ? "Вернуть" : "Выполнить";
+        check.onclick = () => toggleGoal(g.id);
+
+        const del = document.createElement("button");
+        del.className = "delete";
+        del.textContent = "✕";
+        del.onclick = () => deleteGoal(g.id);
+
+        actions.append(check, del);
+        item.append(info, actions);
+        list.appendChild(item);
+    });
+
+    const total = goals.length;
+    const completed = goals.filter(g => g.done).length;
+    const percent = total ? Math.round(completed / total * 100) : 0;
+
+    document.getElementById("total").textContent = total;
+    document.getElementById("completed").textContent = completed;
+    document.getElementById("percent").textContent = percent + "%";
+    document.getElementById("progress").style.width = percent + "%";
+
+    document.getElementById("progressText").textContent =
+        percent === 100 && total > 0
+        ? "🏆 Все цели достигнуты! Отличная работа!"
+        : "Выполнено " + completed + " из " + total + " целей";
+}
+
+render();
+</script>
+</body>
+</html>
